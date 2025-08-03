@@ -24,4 +24,9 @@ public enum ErrorCode implements ResponseCode {
     private final HttpStatus httpStatus;
     private final String message;
     private final String code;
+
+    @Override
+    public HttpStatus getStatus() {
+        return httpStatus;
+    }
 }

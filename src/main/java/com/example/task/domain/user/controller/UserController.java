@@ -1,11 +1,14 @@
 package com.example.task.domain.user.controller;
 
+import com.example.task.common.code.SuccessCode;
+import com.example.task.common.response.CommonResponse;
 import com.example.task.domain.user.dto.request.LoginRequest;
 import com.example.task.domain.user.dto.request.SignupRequest;
 import com.example.task.domain.user.dto.response.LoginResponse;
 import com.example.task.domain.user.dto.response.SignupResponse;
 import com.example.task.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,14 +22,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<CommonResponse<SignupResponse>> signup(@RequestBody SignupRequest request) {
         SignupResponse signupResponse = userService.signup(request);
-        return ResponseEntity.ok(signupResponse);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of(SuccessCode.SUCCESS_USER_SIGNUP, signupResponse));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
         LoginResponse loginResponse = userService.login(request);
-        return ResponseEntity.ok(loginResponse);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of(SuccessCode.SUCCESS_USER_LOGIN, loginResponse));
     }
 }

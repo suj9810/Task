@@ -47,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 setErrorResponse(response, "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED);
             }
         }
+        filterChain.doFilter(request, response);
     }
 
     private void setErrorResponse(HttpServletResponse response, String message, HttpStatus status) throws IOException {

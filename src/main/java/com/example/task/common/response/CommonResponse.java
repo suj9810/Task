@@ -4,18 +4,21 @@ import com.example.task.common.code.ResponseCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonResponse<T> {
+    private final HttpStatus httpStatus;
     private String status;
     private String message;
+    private T data;
 
-    public static <T> CommonResponse<T> of(String status, String message) {
+    public static <T> CommonResponse<T> of(ResponseCode responseCode, T data) {
         return CommonResponse.<T>builder()
-                .status(status)
-                .message(message)
+                .status(String.valueOf(responseCode.getStatus()))
+                .message(responseCode.getMessage())
                 .build();
     }
 
