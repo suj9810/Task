@@ -59,10 +59,10 @@ public class AdminControllerTest {
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.roles[0]").value("ROLE_ADMIN"));
-    }
+                .andExpect(jsonPath("$.status").value("200 OK"))
+                .andExpect(jsonPath("$.message").value("권한 변경에 성공하였습니다."));
+        }
+
 
     @Test
     @WithMockUser(roles = "USER")
