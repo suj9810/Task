@@ -22,16 +22,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse<SignupResponse>> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
         SignupResponse signupResponse = userService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponse.of(SuccessCode.SUCCESS_USER_SIGNUP, signupResponse));
+                .body(signupResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse loginResponse = userService.login(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponse.of(SuccessCode.SUCCESS_USER_LOGIN, loginResponse));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(loginResponse);
     }
 }

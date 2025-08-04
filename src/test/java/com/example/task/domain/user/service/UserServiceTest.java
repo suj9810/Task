@@ -69,7 +69,8 @@ public class UserServiceTest {
         // then
         assertThat(response.getUsername()).isEqualTo("testuser");
         assertThat(response.getEmail()).isEqualTo("test@example.com");
-        assertThat(response.getRoles()).contains("ROLE_USER");
+        assertThat(response.getRoles()).hasSize(1);
+        assertThat(response.getRoles().get(0).getRole()).isEqualTo("ROLE_USER");
         
         verify(userRepository).existsByEmail(request.getEmail());
         verify(passwordEncoder).encode(request.getPassword());

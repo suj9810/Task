@@ -1,6 +1,7 @@
 package com.example.task.common.exception.handler;
 
 import com.example.task.common.exception.BaseException;
+import com.example.task.common.exception.CustomException;
 import com.example.task.common.exception.dto.ValidationError;
 import com.example.task.common.response.CommonResponse;
 import com.example.task.common.response.CommonResponses;
@@ -19,11 +20,46 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<CommonResponse<ResponseCode>> handleBaseException(BaseException baseException) {
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException baseException) {
         LogUtils.logError(baseException);
 
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .error(ErrorResponse.ErrorDetail.builder()
+                        .code(baseException.getResponseCode().getCode())
+                        .message(baseException.getResponseCode().getMessage())
+                        .build())
+                .build();
+
         return ResponseEntity.status(baseException.getHttpStatus())
-                .body(CommonResponse.from(baseException.getResponseCode()));
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException customException) {
+        LogUtils.logError(customException);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .error(ErrorResponse.ErrorDetail.builder()
+                        .code(customException.getResponseCode().getCode())
+                        .message(customException.getResponseCode().getMessage())
+                        .build())
+                .build();
+
+        return ResponseEntity.status(customException.getHttpStatus())
+                .body(errorResponse);
+    }
+
+    @lombok.Getter
+    @lombok.Builder
+    public static class ErrorResponse {
+        private ErrorDetail error;
+
+        @lombok.Getter
+        @lombok.Builder
+        public static class ErrorDetail {
+            private String code;
+            private String message;
+        }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

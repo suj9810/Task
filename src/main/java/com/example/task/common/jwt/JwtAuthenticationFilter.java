@@ -29,6 +29,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/users/signup") || requestURI.equals("/users/login") || 
+            requestURI.startsWith("/h2-console") || requestURI.startsWith("/swagger-ui") || 
+            requestURI.startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String token = resolveToken(request);
         if (token != null) {
             if (tokenProvider.validateToken(token)) {
@@ -44,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             } else {
                 setErrorResponse(response, "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED);
+                return;
             }
         }
         filterChain.doFilter(request, response);

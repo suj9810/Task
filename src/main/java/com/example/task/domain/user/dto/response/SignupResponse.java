@@ -8,17 +8,21 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SignupResponse {
-    private Long id;
     private String username;
     private String email;
-    private List<String> roles;
+    private List<RoleInfo> roles;
+
+    @Getter
+    @Builder
+    public static class RoleInfo {
+        private String role;
+    }
 
     public static SignupResponse of(User user) {
         return SignupResponse.builder()
-                .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .roles(List.of(user.getUserRole().name()))
+                .roles(List.of(RoleInfo.builder().role(user.getUserRole().name()).build()))
                 .build();
     }
 }
