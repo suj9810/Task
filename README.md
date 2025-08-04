@@ -122,7 +122,7 @@ com.example.task
 ## API 문서
 
 ### Swagger UI 접속
-- **배포 환경**: http://15.164.134.153:8080/swagger-ui.html
+- **배포 환경**: http://15.164.134.153:8080/swagger-ui/index.html
 
 ### 사용자 API
 - `POST /users/signup` - 회원가입
